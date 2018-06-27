@@ -5,7 +5,6 @@ import (
 )
 
 
-
 func main() {
 	h := history.New()
 
@@ -14,4 +13,5 @@ func main() {
 	h.CreateTasks()
 
 	h.SyncGroup.Wait()
+	h.SyncGroupPost.Wait()
 }

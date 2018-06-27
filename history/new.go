@@ -26,9 +26,10 @@ type TypeApprovedHistory struct {
 	Start     *TypeDate
 	End       *TypeDate
 	ChanDate  chan *TypeCurrDate
-	ChanSync  chan bool
+	ChanPost  chan *DataImageType
 	OneDay    int64
 	SyncGroup sync.WaitGroup
+	SyncGroupPost sync.WaitGroup
 }
 
 func New() *TypeApprovedHistory {
@@ -36,7 +37,7 @@ func New() *TypeApprovedHistory {
 		Start:    &TypeDate{},
 		End:      &TypeDate{},
 		ChanDate: make(chan *TypeCurrDate),
-		ChanSync: make(chan bool),
+		ChanPost: make(chan *DataImageType),
 		OneDay:   int64(86400), // a day in seconds.
 	}
 

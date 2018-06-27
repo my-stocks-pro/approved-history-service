@@ -32,5 +32,4 @@ func (h *TypeApprovedHistory) CreateTasks() {
 			h.ChanDate <- h.NewDate(t, timestamp)
 		}
 	}
-
 }
