@@ -23,10 +23,10 @@ func main() {
 		h.CreateTasks()
 
 		var dateRange Date
-		if c.Bind(&dateRange) == nil {
-			fmt.Println(dateRange.Start)
-			fmt.Println(dateRange.End)
 
+		err := c.Bind(&dateRange)
+		if err != nil {
+			fmt.Println(err)
 		}
 
 		h.SyncGroup.Wait()
