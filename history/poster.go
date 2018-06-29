@@ -2,7 +2,6 @@ package history
 
 import (
 	"net/http"
-	"fmt"
 	"bytes"
 )
 
@@ -24,9 +23,4 @@ func (h *TypeApprovedHistory) Post(data []byte) (*http.Response, error) {
 	}
 
 	return resp, nil
-
-	fmt.Println(string(data))
-
-	return nil, nil
-
 }
