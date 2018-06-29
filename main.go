@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/my-stocks-pro/approved-history-service/history"
 	"fmt"
 )
 
@@ -10,38 +11,29 @@ type Date struct {
 	End   string `form:"end"`
 }
 
-
-func bindDate(c *gin.Context) {
-	var dateRange Date
-	if c.Bind(&dateRange) == nil {
-		fmt.Println(dateRange.Start)
-		fmt.Println(dateRange.End)
-	}
-	c.String(200, "Success")
-}
-
-
 func main() {
 	router := gin.Default()
 
-	router.GET("history/approved", bindDate)
+	router.GET("history/approved", func(c *gin.Context) {
 
+		h := history.New()
 
-	//{
-	//
-	//	if c.BindJSON(data) == nil {
-	//		fmt.Println("Post fron scheduler -> ", data)
-	//	}
-	//})
+		go h.CreateWorker()
 
-	//h := history.New()
-	//
-	//go h.CreateWorker()
-	//
-	//h.CreateTasks()
-	//
-	//h.SyncGroup.Wait()
-	//h.SyncGroupPost.Wait()
+		h.CreateTasks()
+
+		var dateRange Date
+		if c.Bind(&dateRange) == nil {
+			fmt.Println(dateRange.Start)
+			fmt.Println(dateRange.End)
+
+		}
+
+		h.SyncGroup.Wait()
+		h.SyncGroupPost.Wait()
+
+		c.String(200, "Success")
+	})
 
 	router.Run(":8002")
 }
