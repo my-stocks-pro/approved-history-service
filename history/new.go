@@ -3,9 +3,15 @@ package history
 import (
 	"time"
 	"fmt"
-	"os"
 	"sync"
 )
+
+
+type TpeDateRange struct {
+	Start string `form:"start"`
+	End   string `form:"end"`
+}
+
 
 type TypeCurrDate struct {
 	TimeStamp time.Time
@@ -32,7 +38,7 @@ type TypeApprovedHistory struct {
 	SyncGroupPost sync.WaitGroup
 }
 
-func New() *TypeApprovedHistory {
+func New(dateRange TpeDateRange) *TypeApprovedHistory {
 	h := &TypeApprovedHistory{
 		Start:    &TypeDate{},
 		End:      &TypeDate{},
@@ -41,8 +47,8 @@ func New() *TypeApprovedHistory {
 		OneDay:   int64(86400), // a day in seconds.
 	}
 
-	h.End = h.GetDate(os.Getenv("END"))
-	h.Start = h.GetDate(os.Getenv("START"))
+	h.Start = h.GetDate(dateRange.Start)
+	h.End = h.GetDate(dateRange.End)
 
 	return h
 }

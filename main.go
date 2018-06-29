@@ -6,28 +6,22 @@ import (
 	"fmt"
 )
 
-type Date struct {
-	Start string `form:"start"`
-	End   string `form:"end"`
-}
-
 func main() {
 	router := gin.Default()
 
 	router.GET("history/approved", func(c *gin.Context) {
 
-		h := history.New()
-
-		go h.CreateWorker()
-
-		h.CreateTasks()
-
-		var dateRange Date
-
+		var dateRange history.TpeDateRange
 		err := c.Bind(&dateRange)
 		if err != nil {
 			fmt.Println(err)
 		}
+
+		h := history.New(dateRange)
+
+		go h.CreateWorker()
+
+		h.CreateTasks()
 
 		h.SyncGroup.Wait()
 		h.SyncGroupPost.Wait()
