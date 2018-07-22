@@ -11,6 +11,10 @@ import (
 func main() {
 	router := gin.Default()
 
+	h := history.New()
+
+	fmt.Println(h.Config)
+
 	router.GET("history/approved", func(c *gin.Context) {
 
 		var dateRange history.TypeDateRange
@@ -26,7 +30,10 @@ func main() {
 			fmt.Println(err)
 		}
 
-		h := history.New(dateRange)
+		//h := history.New(dateRange)
+
+		h.Start = h.GetDate(dateRange.Start)
+		h.End = h.GetDate(dateRange.End)
 
 		go h.CreateWorker()
 

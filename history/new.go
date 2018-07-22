@@ -6,12 +6,10 @@ import (
 	"sync"
 )
 
-
 type TypeDateRange struct {
 	Start string `form:"start"`
 	End   string `form:"end"`
 }
-
 
 type TypeCurrDate struct {
 	TimeStamp time.Time
@@ -29,26 +27,25 @@ type TypeDate struct {
 }
 
 type TypeApprovedHistory struct {
-	Start     *TypeDate
-	End       *TypeDate
-	ChanDate  chan *TypeCurrDate
-	ChanPost  chan *DataImageType
-	OneDay    int64
-	SyncGroup sync.WaitGroup
+	Config        *TypeConfig
+	Start         *TypeDate
+	End           *TypeDate
+	ChanDate      chan *TypeCurrDate
+	ChanPost      chan *DataImageType
+	OneDay        int64
+	SyncGroup     sync.WaitGroup
 	SyncGroupPost sync.WaitGroup
 }
 
-func New(dateRange TypeDateRange) *TypeApprovedHistory {
+func New() *TypeApprovedHistory {
 	h := &TypeApprovedHistory{
+		Config:   LoadConfig(),
 		Start:    &TypeDate{},
 		End:      &TypeDate{},
 		ChanDate: make(chan *TypeCurrDate),
 		ChanPost: make(chan *DataImageType),
 		OneDay:   int64(86400), // a day in seconds.
 	}
-
-	h.Start = h.GetDate(dateRange.Start)
-	h.End = h.GetDate(dateRange.End)
 
 	return h
 }
