@@ -13,8 +13,6 @@ func main() {
 
 	h := history.New()
 
-	fmt.Println(h.Config)
-
 	router.GET("history/approved", func(c *gin.Context) {
 
 		var dateRange history.TypeDateRange
