@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"gopkg.in/yaml.v2"
+	"os"
 )
 
 type TypeConfig struct {
@@ -18,7 +19,12 @@ type TypeConfig struct {
 func LoadConfig() *TypeConfig {
 	conf := &TypeConfig{}
 
-	data, errReadFile := ioutil.ReadFile("config/approved-history-service.yaml")
+	confPath := os.Getenv("CONFPATH")
+	if confPath == "" {
+		confPath = "config/approved-history-service.yaml"
+	}
+
+	data, errReadFile := ioutil.ReadFile(confPath)
 	if errReadFile != nil {
 		log.Fatalf("error: %v", errReadFile)
 	}
