@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/my-stocks-pro/approved-history-service/history"
 	"fmt"
+	"io/ioutil"
+	"encoding/json"
 )
 
 func main() {
@@ -11,8 +13,15 @@ func main() {
 
 	router.GET("history/approved", func(c *gin.Context) {
 
-		var dateRange history.TpeDateRange
-		err := c.Bind(&dateRange)
+		var dateRange history.TypeDateRange
+
+		body := c.Request.Body
+		b, e := ioutil.ReadAll(body)
+		if e != nil {
+			fmt.Println(e)
+		}
+
+		err := json.Unmarshal(b, &dateRange)
 		if err != nil {
 			fmt.Println(err)
 		}

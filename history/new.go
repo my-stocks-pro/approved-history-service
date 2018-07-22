@@ -7,7 +7,7 @@ import (
 )
 
 
-type TpeDateRange struct {
+type TypeDateRange struct {
 	Start string `form:"start"`
 	End   string `form:"end"`
 }
@@ -38,7 +38,7 @@ type TypeApprovedHistory struct {
 	SyncGroupPost sync.WaitGroup
 }
 
-func New(dateRange TpeDateRange) *TypeApprovedHistory {
+func New(dateRange TypeDateRange) *TypeApprovedHistory {
 	h := &TypeApprovedHistory{
 		Start:    &TypeDate{},
 		End:      &TypeDate{},
