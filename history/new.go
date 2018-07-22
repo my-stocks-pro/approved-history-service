@@ -4,6 +4,7 @@ import (
 	"time"
 	"fmt"
 	"sync"
+	"os"
 )
 
 type TypeDateRange struct {
@@ -45,6 +46,11 @@ func New() *TypeApprovedHistory {
 		ChanDate: make(chan *TypeCurrDate),
 		ChanPost: make(chan *DataImageType),
 		OneDay:   int64(86400), // a day in seconds.
+	}
+
+	prod := os.Getenv("PROD")
+	if prod == "" {
+		h.Config.Host = "127.0.0.1"
 	}
 
 	return h

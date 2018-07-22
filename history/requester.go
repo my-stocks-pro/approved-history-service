@@ -77,16 +77,16 @@ type DataImageType struct {
 	}
 }
 
-const (
-	BaseURL = "https://submit.shutterstock.com/api/catalog_manager/media_types/all/items?filter_type=date_uploaded&filter_value=%s-%s-01%s%s-%s-%s&page_number=%s&per_page=%s&sort=popular"
-	ApiURL  = "https://api.shutterstock.com/v2/images"
-	Session = "s%3AFLsDQ0KkRmbbHJSFijJz_5VxQPCQI7Ol.t5LQWhFeOPA9qV2S0fqa6JBsFB0Rq%2BrxMDPc1URXyHE"
-	Token   = "v2/NjYxMWYtZjk4NjItNWI0ZDEtYjc3ODktNmIyYWEtZWU3NDUvMTEyNDM5ODQ1L2N1c3RvbWVyLzMveEZSaF85amREWHFaOFZuNjZfcjZVaUhWYzlYZmhVVl9kZURtU1EybHBSbDJ0eDFxUXh5czEzUXdRdkV6Wjl6dFBYcXpGbHk4RWhWZUpxU1U4TlFoWll3RjF1YkZKMFhsS0FndDQtSTY5Y0k0TV9nYy0yVFEzLXdzeC02TXdXMlloVFQyQ2kwZzBjZmtsVmNNVE5OUjZCSHdNY1kzSUQ4SW1CZHlwT1dYNFQ5enNIUkFPdUh3VElPRmxaZ214a003dDc1UHE0Tmpta0tIN3ZYM3g4V2xlUQ"
-)
+//const (
+//	BaseURL = "https://submit.shutterstock.com/api/catalog_manager/media_types/all/items?filter_type=date_uploaded&filter_value=%s-%s-01%s%s-%s-%s&page_number=%s&per_page=%s&sort=popular"
+//	ApiURL  = "https://api.shutterstock.com/v2/images"
+//	Session = "s%3AFLsDQ0KkRmbbHJSFijJz_5VxQPCQI7Ol.t5LQWhFeOPA9qV2S0fqa6JBsFB0Rq%2BrxMDPc1URXyHE"
+//	Token   = "v2/NjYxMWYtZjk4NjItNWI0ZDEtYjc3ODktNmIyYWEtZWU3NDUvMTEyNDM5ODQ1L2N1c3RvbWVyLzMveEZSaF85amREWHFaOFZuNjZfcjZVaUhWYzlYZmhVVl9kZURtU1EybHBSbDJ0eDFxUXh5czEzUXdRdkV6Wjl6dFBYcXpGbHk4RWhWZUpxU1U4TlFoWll3RjF1YkZKMFhsS0FndDQtSTY5Y0k0TV9nYy0yVFEzLXdzeC02TXdXMlloVFQyQ2kwZzBjZmtsVmNNVE5OUjZCSHdNY1kzSUQ4SW1CZHlwT1dYNFQ5enNIUkFPdUh3VElPRmxaZ214a003dDc1UHE0Tmpta0tIN3ZYM3g4V2xlUQ"
+//)
 
 func (h *TypeApprovedHistory) BaseRequest(page string, current *TypeCurrDate) (*BaseRespType, error) {
 
-	newURL := fmt.Sprintf(BaseURL, current.Year, current.Month, "%20", current.Year, current.Month, current.Day, page, "100")
+	newURL := fmt.Sprintf(h.Config.Baseurl, current.Year, current.Month, "%20", current.Year, current.Month, current.Day, page, "100")
 
 	res, errRequest := h.NewRequest(newURL)
 	if errRequest != nil {
@@ -104,7 +104,7 @@ func (h *TypeApprovedHistory) BaseRequest(page string, current *TypeCurrDate) (*
 
 func (h *TypeApprovedHistory) FullRequest(query string) (*DataImageType, error) {
 
-	res, errRequest := h.NewRequest(fmt.Sprintf("%s?%s", ApiURL, query))
+	res, errRequest := h.NewRequest(fmt.Sprintf("%s?%s", h.Config.Apiurl, query))
 	if errRequest != nil {
 		return nil, errRequest
 	}
@@ -127,8 +127,8 @@ func (h *TypeApprovedHistory) NewRequest(url string) ([]byte, error) {
 		return nil, err
 	}
 
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", Token))
-	cookie := http.Cookie{Name: "session", Value: Session}
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", h.Config.Token))
+	cookie := http.Cookie{Name: "session", Value: h.Config.Session}
 	req.AddCookie(&cookie)
 
 	client := http.Client{}
